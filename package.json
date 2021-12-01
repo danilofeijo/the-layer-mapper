@@ -1,0 +1,21 @@
+{
+  "name": "the-layer-mapper",
+  "version": "0.0.1",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watchAll"
+  },
+  "repository": "git+https://github.com/danilofeijo/the-layer-mapper.git",
+  "keywords": [],
+  "author": "Ewerton Mendes <ewertonm@ciandt.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/danilofeijo/the-layer-mapper/issues"
+  },
+  "homepage": "https://github.com/danilofeijo/the-layer-mapper#readme",
+  "devDependencies": {
+    "jest": "^27.4.2"
+  }
+}
