@@ -1,51 +1,97 @@
 const fileResolver = require("../resolvers/fileResolver");
 const fs = require("fs");
 
-describe("fileHandler.js tests", () => {
-  const filePath = "./test.js";
-  const fileName = "test.js";
-  const fileContent = `it("should do nothing", () => {
+const fileContent = `it("should do nothing", () => {
+  expect(true).toBe(true);
+});
+it("should do nothing twice", () => {
+  expect(true).toBe(true);
+});`;
+
+function _createTestFiles(times) {
+  let filePathList = [];
+  for (let i = 0; i < times; i++) {
+    const filePathAndName = `./test${i + 1}.spec.js`;
+    
+    fs.writeFileSync(filePathAndName, fileContent, () => {
+      console.log("file created");
+    });
+
+    filePathList.push(filePathAndName);
+  }
+  return filePathList;
+}
+
+function _createNormalFiles(times) {
+  let filePathList = [];
+  for (let i = 0; i < times; i++) {
+    const filePathAndName = `./notATest${i + 1}.js`;
+    const fileContent = `it("should do nothing", () => {
     expect(true).toBe(true);
   });
   it("should do nothing twice", () => {
     expect(true).toBe(true);
   });`;
 
-  beforeEach(() => {
-    fs.writeFileSync(filePath, fileContent, () => {
+    fs.writeFileSync(filePathAndName, fileContent, () => {
       console.log("file created");
     });
+
+    filePathList.push(filePathAndName);
+  }
+  return filePathList;
+}
+
+function _deleteFiles(filePathList) {
+  filePathList.forEach((filePath) => {
+    fs.unlinkSync(filePath);
+  });
+}
+
+describe("fileHandler.js tests", () => {
+  let filePathList = [];
+
+  beforeEach(() => {
+    filePathList = _createTestFiles(5);
   });
 
   it("should read a file content", () => {
-    const sut = fileResolver.readFileContent(filePath);
+    const sut = fileResolver.readFileContent(filePathList[0]);
     expect(sut).toBe(fileContent);
   });
 
   it("should get the name of test files inside a folder", () => {
-    const filteredFiles = ["test1.spec.js", "test2.spec.js"];
+    const filteredFiles = [
+      { file: "test1.spec.js", absolutePath: "test1.spec.js" },
+      { file: "test2.spec.js", absolutePath: "test2.spec.js" },
+    ];
 
     fs.readdirSync = jest
       .fn()
-      .mockReturnValue(["test1.spec.js", "test2.spec.js", "notATest.js"]);
+      .mockReturnValue(["test1.spec.js", "test2.spec.js", "notATest1.js"]);
 
-    const sut = fileResolver.getTestFilesNames("/blah");
+    const normalFilesList = _createNormalFiles(1);
+
+    const sut = fileResolver.getTestFileReferenceList("./");
     expect(sut).toStrictEqual(filteredFiles);
+
+    _deleteFiles(normalFilesList);
   });
 
   it("should get the name of the test cases inside a file", () => {
     const testRegex = /.*it[(]['\"](.+?)['\"`]/gm;
+    const fileName = filePathList[0];
     const result = {
       fileName: fileName,
       tests: ["should do nothing", "should do nothing twice"],
     };
 
-    const sut = fileResolver.getTestsName(fileName, fileContent, testRegex);
+    const sut = fileResolver.getTestNames(fileName, fileContent, testRegex);
 
     expect(sut).toStrictEqual(result);
   });
 
   afterEach(() => {
-    fs.unlinkSync(filePath);
+    _deleteFiles(filePathList);
   });
 });

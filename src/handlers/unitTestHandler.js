@@ -9,14 +9,12 @@ const fileResolver = require("../resolvers/fileResolver");
  */
 function handle(settings) {
   let allTests = [];
-  const fileNameList = fileResolver.getTestFilesNames(settings.filesFolderPath);
+  const fileReferenceList = fileResolver.getTestFileReferenceList(settings.filesFolderPath);
 
-  fileNameList.forEach((filePath) => {
-    const fileContent = fileResolver.readFileContent(
-      settings.filesFolderPath + "/" + filePath
-    );
-    const testsName = fileResolver.getTestsName(filePath, fileContent, settings.testRegex);
-    allTests.push(testsName);
+  fileReferenceList.forEach((filePath, index) => {
+    const fileContent = fileResolver.readFileContent(fileReferenceList[index].absolutePath);
+    const testName = fileResolver.getTestNames(filePath, fileContent, settings.testRegex);
+    allTests.push(testName);
   });
 
   return allTests;

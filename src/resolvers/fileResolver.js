@@ -1,13 +1,16 @@
 const fs = require("fs");
+const path = require("path");
 
-// const JEST_REGEX = /.*it[(]['\"](.+?)['\"`]/gm;
-
-function getTestFilesNames(path) {
-  const allFilesNameList = fs.readdirSync(path);
+function getTestFileReferenceList(baseFolderPath) {
+  const allFilesNameList = fs.readdirSync(baseFolderPath);
   let result = [];
   allFilesNameList.forEach((file) => {
+    const absolute = path.join(baseFolderPath, file);
+    if (fs.statSync(absolute).isDirectory()) {
+      result.push(...getTestFileReferenceList(absolute));
+    }
     if (file.endsWith(".spec.js")) {
-      result.push(file);
+      result.push({ file: file, absolutePath: absolute });
     }
   });
   return result;
@@ -17,7 +20,7 @@ function readFileContent(filePath) {
   return fs.readFileSync(filePath, "utf8").toString();
 }
 
-function getTestsName(fileName, fileContent, testRegex) {
+function getTestNames(fileName, fileContent, testRegex) {
   const result = [];
   let match = testRegex.exec(fileContent);
 
@@ -33,7 +36,7 @@ function getTestsName(fileName, fileContent, testRegex) {
 }
 
 module.exports = {
-  getTestFilesNames,
+  getTestFileReferenceList,
   readFileContent,
-  getTestsName,
+  getTestNames,
 };

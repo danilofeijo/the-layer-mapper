@@ -34,9 +34,9 @@ describe("fileHandler.js tests", () => {
       },
     ];
 
-    fileResolver.getTestFilesNames = jest.fn().mockReturnValue(fileNameList);
+    fileResolver.getTestFileReferenceList = jest.fn().mockReturnValue(fileNameList);
     fileResolver.readFileContent = jest.fn().mockReturnValue(fileContent);
-    fileResolver.getTestsName = jest
+    fileResolver.getTestNames = jest
       .fn()
       .mockReturnValueOnce(testReturnObj1)
       .mockReturnValueOnce(testReturnObj2);
