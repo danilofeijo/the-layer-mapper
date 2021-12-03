@@ -34,12 +34,13 @@ describe("fileHandler.js tests", () => {
   });
 
   it("should get the name of the test cases inside a file", () => {
+    const testRegex = /.*it[(]['\"](.+?)['\"`]/gm;
     const result = {
       fileName: fileName,
       tests: ["should do nothing", "should do nothing twice"],
     };
 
-    const sut = fileResolver.getTestsName(fileName, fileContent);
+    const sut = fileResolver.getTestsName(fileName, fileContent, testRegex);
 
     expect(sut).toStrictEqual(result);
   });

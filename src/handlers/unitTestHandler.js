@@ -1,16 +1,21 @@
 const fileResolver = require("../resolvers/fileResolver");
 
-const FILES_FOLDER_PATH = "../src/tests";
+// const FILES_FOLDER_PATH = "../src/tests";
 
-function handle() {
+/**
+ * 
+ * @param {Object} settings - The settings who guides the test hunting
+ * @returns 
+ */
+function handle(settings) {
   let allTests = [];
-  const fileNameList = fileResolver.getTestFilesNames(FILES_FOLDER_PATH);
+  const fileNameList = fileResolver.getTestFilesNames(settings.filesFolderPath);
 
   fileNameList.forEach((filePath) => {
     const fileContent = fileResolver.readFileContent(
-      FILES_FOLDER_PATH + "/" + filePath
+      settings.filesFolderPath + "/" + filePath
     );
-    const testsName = fileResolver.getTestsName(filePath, fileContent);
+    const testsName = fileResolver.getTestsName(filePath, fileContent, settings.testRegex);
     allTests.push(testsName);
   });
 

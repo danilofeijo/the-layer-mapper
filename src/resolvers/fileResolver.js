@@ -1,6 +1,6 @@
 const fs = require("fs");
 
-const JEST_REGEX = /.*it[(]['\"](.+?)['\"`],/gm;
+// const JEST_REGEX = /.*it[(]['\"](.+?)['\"`]/gm;
 
 function getTestFilesNames(path) {
   const allFilesNameList = fs.readdirSync(path);
@@ -17,14 +17,14 @@ function readFileContent(filePath) {
   return fs.readFileSync(filePath, "utf8").toString();
 }
 
-function getTestsName(fileName, fileContent) {
+function getTestsName(fileName, fileContent, testRegex) {
   const result = [];
-  let match = JEST_REGEX.exec(fileContent);
+  let match = testRegex.exec(fileContent);
 
   do {
     console.log(`Match: ${match[1]}`);
     result.push(match[1]);
-  } while ((match = JEST_REGEX.exec(fileContent)) !== null);
+  } while ((match = testRegex.exec(fileContent)) !== null);
 
   return {
     fileName: fileName,
