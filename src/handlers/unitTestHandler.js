@@ -1,19 +1,13 @@
 const fileResolver = require("../resolvers/fileResolver");
+const config = require("../globalConfig")
 
-// const FILES_FOLDER_PATH = "../src/tests";
-
-/**
- * 
- * @param {Object} settings - The settings who guides the test hunting
- * @returns 
- */
-function handle(settings) {
+function handle() {
   let allTests = [];
-  const fileReferenceList = fileResolver.getTestFileReferenceList(settings.filesFolderPath);
+  const fileReferenceList = fileResolver.getTestFileReferenceList(config.unitTests.folderPath);
 
   fileReferenceList.forEach((filePath, index) => {
     const fileContent = fileResolver.readFileContent(fileReferenceList[index].absolutePath);
-    const testName = fileResolver.getTestNames(filePath, fileContent, settings.testRegex);
+    const testName = fileResolver.getTestNames(filePath, fileContent, new RegExp(config.unitTests.regex, 'gm'));
     allTests.push(testName);
   });
 

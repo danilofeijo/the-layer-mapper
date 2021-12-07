@@ -5,10 +5,6 @@ describe("fileHandler.js tests", () => {
   const fileContent = "console.log('testing')";
 
   it("should return the tests names separated by file", () => {
-    const settings = {
-      filesFolderPath: '../src/tests',
-      testRegex: /.*it[(]['\"](.+?)['\"`]/gm,
-    }
 
     const fileNameList = ["blah1.spec.js", "blah2.spec.js"];
     const testsArray = ["test1", "test2"];
@@ -42,7 +38,7 @@ describe("fileHandler.js tests", () => {
       .mockReturnValueOnce(testReturnObj2);
 
 
-    const sut = unitTestHandler.handle(settings);
+    const sut = unitTestHandler.handle();
 
     expect(sut).toStrictEqual(result);
   });
