@@ -2,6 +2,11 @@ const fs = require("fs");
 const path = require("path");
 
 function getTestFileReferenceList(baseFolderPath) {
+
+  if (!fs.existsSync(baseFolderPath)) {
+    throw new Error(`Base folder path ${baseFolderPath} does not exist`);
+  }
+
   const allFilesNameList = fs.readdirSync(baseFolderPath);
   let result = [];
   allFilesNameList.forEach((file) => {
