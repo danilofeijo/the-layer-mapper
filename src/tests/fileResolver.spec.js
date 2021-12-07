@@ -62,8 +62,8 @@ describe("fileHandler.js tests", () => {
 
   it("should get the name of test files inside a folder", () => {
     const filteredFiles = [
-      { file: "test1.spec.js", absolutePath: "test1.spec.js" },
-      { file: "test2.spec.js", absolutePath: "test2.spec.js" },
+      { fileName: "test1.spec.js", absolutePath: "test1.spec.js" },
+      { fileName: "test2.spec.js", absolutePath: "test2.spec.js" },
     ];
 
     fs.readdirSync = jest
@@ -82,7 +82,7 @@ describe("fileHandler.js tests", () => {
     const testRegex = /.*it[(]['\"](.+?)['\"`]/gm;
     const fileName = filePathList[0];
     const result = {
-      fileName: fileName,
+      file: fileName,
       tests: ["should do nothing", "should do nothing twice"],
     };
 

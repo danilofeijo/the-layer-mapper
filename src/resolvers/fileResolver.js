@@ -9,13 +9,13 @@ function getTestFileReferenceList(baseFolderPath) {
 
   const allFilesNameList = fs.readdirSync(baseFolderPath);
   let result = [];
-  allFilesNameList.forEach((file) => {
-    const absolute = path.join(baseFolderPath, file);
+  allFilesNameList.forEach((fileName) => {
+    const absolute = path.join(baseFolderPath, fileName);
     if (fs.statSync(absolute).isDirectory()) {
       result.push(...getTestFileReferenceList(absolute));
     }
-    if (file.endsWith(".spec.js")) {
-      result.push({ file: file, absolutePath: absolute });
+    if (fileName.endsWith(".spec.js")) {
+      result.push({ fileName: fileName, absolutePath: absolute });
     }
   });
   return result;
@@ -25,7 +25,7 @@ function readFileContent(filePath) {
   return fs.readFileSync(filePath, "utf8").toString();
 }
 
-function getTestNames(fileName, fileContent, testRegex) {
+function getTestNames(fileObj, fileContent, testRegex) {
   const result = [];
   let match = testRegex.exec(fileContent);
 
@@ -35,7 +35,7 @@ function getTestNames(fileName, fileContent, testRegex) {
   } while ((match = testRegex.exec(fileContent)) !== null);
 
   return {
-    fileName: fileName,
+    file: fileObj,
     tests: result,
   };
 }

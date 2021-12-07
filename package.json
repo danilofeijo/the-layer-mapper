@@ -17,5 +17,8 @@
   "homepage": "https://github.com/danilofeijo/the-layer-mapper#readme",
   "devDependencies": {
     "jest": "^27.4.2"
+  },
+  "dependencies": {
+    "csv-writer": "^1.6.0"
   }
 }

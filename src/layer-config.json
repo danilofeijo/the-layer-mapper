@@ -2,5 +2,6 @@
     "unitTests": {
         "regex": ".*it[(]['\"](.+?)['\"`]",
         "folderPath": "../src/tests"
-    }
+    },
+    "outputFolder": "../output"
 }

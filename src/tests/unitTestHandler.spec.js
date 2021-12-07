@@ -1,6 +1,8 @@
 const unitTestHandler = require("../handlers/unitTestHandler");
 const fileResolver = require("../resolvers/fileResolver");
 
+jest.mock("../resolvers/csvResolver");
+
 describe("fileHandler.js tests", () => {
   const fileContent = "console.log('testing')";
 
