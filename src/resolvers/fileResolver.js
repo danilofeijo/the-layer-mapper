@@ -25,7 +25,7 @@ function readFileContent(filePath) {
   return fs.readFileSync(filePath, "utf8").toString();
 }
 
-function getTestNames(fileObj, fileContent, testRegex) {
+function getTestNames({fileType, fileObj, fileContent, testRegex}) {
   const result = [];
   let match = testRegex.exec(fileContent);
 
@@ -36,6 +36,7 @@ function getTestNames(fileObj, fileContent, testRegex) {
 
   return {
     file: fileObj,
+    testType: fileType,
     tests: result,
   };
 }

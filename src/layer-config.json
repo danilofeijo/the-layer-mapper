@@ -3,5 +3,13 @@
         "regex": ".*it[(]['\"](.+?)['\"`]",
         "folderPath": "../src/tests"
     },
+    "integrationTests": {
+        "regex": ".*it[(]['\"](.+?)['\"`]",
+        "folderPath": "../src/tests"
+    },
+    "endToEndTests": {
+        "regex": ".*it[(]['\"](.+?)['\"`]",
+        "folderPath": "../src/tests"
+    },
     "outputFolder": "../output"
 }

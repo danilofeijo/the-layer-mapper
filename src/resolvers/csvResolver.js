@@ -1,6 +1,7 @@
 const createCsvWriter = require("csv-writer").createObjectCsvWriter;
 const config = require("../globalConfig");
 const fs = require("fs");
+const testReport = require("../testReport.json");
 
 function createFolderIfNotExists(path) {
   if (!fs.existsSync(path)) {
@@ -8,7 +9,7 @@ function createFolderIfNotExists(path) {
   }
 }
 
-function createCsv({ data }) {
+async function createCsv() {
   createFolderIfNotExists(config.outputFolder);
   const csvWriter = createCsvWriter({
     path: `${config.outputFolder}/tests-report.csv`,
@@ -20,21 +21,9 @@ function createCsv({ data }) {
     ],
   });
 
-  const parsedData = data.reduce((acc, item) => {
-    item.tests.forEach((test) => {
-      acc.push({
-        testType: "Unit Test",
-        testFile: item.file.fileName,
-        absolutePath: item.file.absolutePath,
-        testName: test,
-      });
-    });
-    return acc;
-  }, []);
+  await csvWriter.writeRecords(testReport);
 
-  csvWriter
-    .writeRecords(parsedData)
-    .then(() => console.log("The CSV file was written successfully"));
+  console.log("The CSV file was written successfully");
 }
 
 module.exports = {
