@@ -1,5 +1,4 @@
 const fileResolver = require("../resolvers/fileResolver");
-const csv = require("../resolvers/csvResolver");
 
 function handle({currentConfig}) {
   let allTests = [];

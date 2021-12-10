@@ -1,8 +1,9 @@
 const genericTestHandler = require("./handlers/genericTestHandler");
 const config = require("./globalConfig");
 const fs = require("fs");
-const csv = require("./resolvers/csvResolver");
-const html = require("./resolvers/htmlResolver");
+const eventBus = require("./utils/eventBus");
+require("./resolvers/csvResolver");
+require("./resolvers/htmlResolver");
 
 
 async function main() {
@@ -10,10 +11,7 @@ async function main() {
 
   const allTests = _getAllTests();
 
-  _generateJsonFile(allTests);
-
-  await csv.createCsv();
-  html.createHtml();
+  await _generateJsonFile(allTests);
 
   console.log("Program Finished");
 }
@@ -52,7 +50,7 @@ function _getAllTests() {
   return allTests;
 }
 
-function _generateJsonFile(allTests) {
+async function _generateJsonFile(allTests) {
   let separatedTests = [];
 
   allTests.flat().forEach((testObj) => {
@@ -70,5 +68,11 @@ function _generateJsonFile(allTests) {
 
   const separatedTestsTogether = separatedTests.flat();
   const json = JSON.stringify(separatedTestsTogether);
-  fs.writeFileSync("testReport.json", json);
+  fs.writeFile("testReport.json", json, (err) => {
+    if (err) {
+      return console.log(err);
+    }
+    console.log("JSON file generated");
+    eventBus.emit("jsonGenerated", "test message");
+  });
 }

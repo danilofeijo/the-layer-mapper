@@ -30,7 +30,6 @@ function getTestNames({fileType, fileObj, fileContent, testRegex}) {
   let match = testRegex.exec(fileContent);
 
   do {
-    console.log(`Match: ${match[1]}`);
     result.push(match[1]);
   } while ((match = testRegex.exec(fileContent)) !== null);
 
