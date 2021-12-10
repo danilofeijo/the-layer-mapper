@@ -26,6 +26,6 @@ async function createCsv() {
 
   await csvWriter.writeRecords(testReport);
 
-  console.log("The CSV file was written successfully");
+  console.log("The CSV file was created successfully");
 }
 
