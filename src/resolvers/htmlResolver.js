@@ -1,6 +1,6 @@
 const config = require("../globalConfig");
 const fs = require("fs");
-
+const counter = require("../utils/counter");
 const eventBus = require("../utils/eventBus");
 
 eventBus.addListener("jsonGenerated", createHtmlFile);
@@ -8,10 +8,17 @@ eventBus.addListener("jsonGenerated", createHtmlFile);
 function generateHtmlContent() {
   const testReport = require("../testReport.json");
 
+  const allTestsCount = counter.countAllTests({ tests: testReport });
+  const unitTestsCount = counter.countUnitTests({ tests: testReport });
+  const integrationTestsCount = counter.countUnitTests({ tests: testReport });
+  const e2eTestsCount = counter.countUnitTests({ tests: testReport });
+
   let content = "";
 
-  testReport.forEach((test) => {
-    content += `<tr><td>${test.testName}</td><td>${test.testType}</td><td>${test.absolutePath}</td></tr>`;
+  testReport.forEach((test, index) => {
+    content += `<tr><th scope="row">${index + 1}</th><td>${
+      test.testName
+    }</td><td>${test.testType}</td><td>${test.absolutePath}</td></tr>`;
   });
 
   return `<!doctype html>
@@ -22,47 +29,54 @@ function generateHtmlContent() {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
       integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <style type="text/css">
-      .final__triangle {
+      <style type="text/css">
+      .pyramid {
         position: relative;
         height: 320px;
         clip-path: polygon(50% 0%, 20% 100%, 80% 100%);
         text-align: center;
+        opacity: 1;
       }
-  
-      .final__triangle div {
+
+      .pyramid div {
         position: absolute;
         line-height: 100px;
-  
         width: 100%;
         height: 100px;
         color: white;
       }
-  
-      .final__triangle .top {
-        background: #70AE6E;
+
+      .pyramid .top {
+        background: #70ae6e;
+        opacity: 0.5;
+        transition: 0.4s ease-out;
       }
-  
-      .final__triangle .top:hover {
-        background: #588a56;
+
+      .pyramid .top:hover {
+        opacity: 1;
+        transition: 0.4s ease-out;
       }
-  
-      .final__triangle .mid {
+
+      .pyramid .mid {
         top: 110px;
-        background: #C17817;
+        opacity: 0.5;
+        background: #c17817;
       }
-  
-      .final__triangle .mid:hover {
-        background: #965d14;
+
+      .pyramid .mid:hover {
+        opacity: 1;
+        transition: 0.4s ease-out;
       }
-  
-      .final__triangle .bottom {
+
+      .pyramid .bottom {
         top: 220px;
-        background: #B10F2E;
+        opacity: 0.5;
+        background: #b10f2e;
       }
-  
-      .final__triangle .bottom:hover {
-        background: #8a0c23;
+
+      .pyramid .bottom:hover {
+        opacity: 1;
+        transition: 0.4s ease-out;
       }
     </style>
   </head>
@@ -73,21 +87,27 @@ function generateHtmlContent() {
     
       <section>
   
-        <div class="final__triangle">
+        <div class="pyramid">
   
-          <div class="top">0</div>
+          <div class="top">${unitTestsCount}</div>
   
-          <div class="mid">0</div>
+          <div class="mid">${integrationTestsCount}</div>
   
-          <div class="bottom">0</div>
+          <div class="bottom">${e2eTestsCount}</div>
   
         </div>
   
       </section>
-      <h1>Test Report</h1>
-      <table class="table table-striped">
-        <thead>
+      <br/>
+      <div class="row">
+        <h1 class="col-6">Test Report</h1>
+        <h3 class="col-6 text-end">Total Tests: ${allTestsCount}</h3>
+      </div>
+      
+      <table class="table table-striped table-hover">
+        <thead class="table-dark">
           <tr>
+            <th scope="col">#</th>
             <th>Test Name</th>
             <th>Test Type</th>
             <th>File Path</th>

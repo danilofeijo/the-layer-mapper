@@ -5,7 +5,6 @@ const eventBus = require("./utils/eventBus");
 require("./resolvers/csvResolver");
 require("./resolvers/htmlResolver");
 
-
 async function main() {
   console.log("Program Started");
 
@@ -25,16 +24,16 @@ function _getAllTests() {
     let currentConfig = {};
     switch (testType) {
       case "unitTests":
-        currentConfig = { ...config.unitTests, testTypeName: "Unit Tests" };
+        currentConfig = { ...config.unitTests, testTypeName: "Unit Test" };
         break;
       case "integrationTests":
         currentConfig = {
           ...config.integrationTests,
-          testTypeName: "Integration Tests",
+          testTypeName: "Integration Test",
         };
         break;
       case "endToEndTests":
-        currentConfig = { ...config.endToEndTests, testTypeName: "E2E Tests" };
+        currentConfig = { ...config.endToEndTests, testTypeName: "E2E Test" };
         break;
       default:
         continue;
