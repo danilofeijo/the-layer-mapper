@@ -50,6 +50,7 @@ function generateHtmlContent() {
         background: #70ae6e;
         opacity: 0.5;
         transition: 0.4s ease-out;
+        line-height: 120px !important;
       }
 
       .pyramid .top:hover {
@@ -89,11 +90,11 @@ function generateHtmlContent() {
   
         <div class="pyramid">
   
-          <div class="top">${unitTestsCount}</div>
+          <div class="top" id="e2e-tests">${unitTestsCount}</div>
   
-          <div class="mid">${integrationTestsCount}</div>
+          <div class="mid" id="integration-tests">${integrationTestsCount}</div>
   
-          <div class="bottom">${e2eTestsCount}</div>
+          <div class="bottom" id="unit-tests">${e2eTestsCount}</div>
   
         </div>
   
@@ -101,10 +102,15 @@ function generateHtmlContent() {
       <br/>
       <div class="row">
         <h1 class="col-6">Test Report</h1>
-        <h3 class="col-6 text-end">Total Tests: ${allTestsCount}</h3>
+        <h3 class="col-6 text-end p-3">
+          Total Tests: ${allTestsCount}
+          <button class="btn btn-primary" id="show-all-tests">
+            Show All Tests
+          </button>
+        </h3>
       </div>
       
-      <table class="table table-striped table-hover">
+      <table id="tests-table" class="table table-striped table-hover">
         <thead class="table-dark">
           <tr>
             <th scope="col">#</th>
@@ -113,12 +119,60 @@ function generateHtmlContent() {
             <th>File Path</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="table-body">
           ${content}
         </tbody>
       </table>
     </div>
   </body>
+  <script>
+    const rows = document
+      .getElementById("tests-table")
+      .getElementsByTagName("tr");
+
+    const unitTestsFilter = document.getElementById("unit-tests");
+    const integrationTestsFilter = document.getElementById("integration-tests");
+    const e2eTestsFilter = document.getElementById("e2e-tests");
+    const showAllTestsButton = document.getElementById("show-all-tests");
+    const tableBody = document.getElementById("table-body");
+
+    const allElements = [
+      ...Array.from(rows).filter(
+        (row) => row.cells[2].innerHTML === "Unit Test"
+      ),
+      ...Array.from(rows).filter(
+        (row) => row.cells[2].innerHTML === "Integration Test"
+      ),
+      ...Array.from(rows).filter(
+        (row) => row.cells[2].innerHTML === "E2E Test"
+      ),
+    ];
+
+    showAllTestsButton.addEventListener("click", () => {
+      tableBody.innerHTML = allElements
+        .map((element) => element.outerHTML)
+        .join("");
+    });
+
+    unitTestsFilter.addEventListener("click", () => {
+      tableBody.innerHTML = filterElementsByType('Unit Test');
+    });
+
+    integrationTestsFilter.addEventListener("click", () => {
+      tableBody.innerHTML = filterElementsByType('Integration Test');
+    });
+
+    e2eTestsFilter.addEventListener("click", () => {
+      tableBody.innerHTML = filterElementsByType('E2E Test');
+    });
+
+    function filterElementsByType(type) {
+      return allElements
+        .filter((row) => row.cells[2].innerHTML === type)
+        .map((row) => row.outerHTML)
+        .join("");
+    }
+  </script>
 </html>`;
 }
 
