@@ -54,6 +54,7 @@ function generateHtmlContent() {
       }
 
       .pyramid .top:hover {
+        cursor: pointer;
         opacity: 1;
         transition: 0.4s ease-out;
       }
@@ -65,6 +66,7 @@ function generateHtmlContent() {
       }
 
       .pyramid .mid:hover {
+        cursor: pointer;
         opacity: 1;
         transition: 0.4s ease-out;
       }
@@ -76,6 +78,7 @@ function generateHtmlContent() {
       }
 
       .pyramid .bottom:hover {
+        cursor: pointer;
         opacity: 1;
         transition: 0.4s ease-out;
       }
